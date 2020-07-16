@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lSQL">
+		<sql id="selCNT">
+			SELECT
+				count(*) cnt
+			FROM
+				member
+			WHERE
+				memid = 
+		
+		</sql>
+		
+		<select id="idCount" resultType="int" parameterType="string">
+			<include refid="selCNT" />#{id}
+		</select>	
+		
+		<select id="kidCount" resultType="int" parameterType="int">
+			SELECT
+				count(*) cnt
+			FROM
+				member
+			WHERE
+				memno = #{memno}
+		</select>
+		
+		
+		<insert id="join">
+			INSERT INTO
+				member(memno, memid, phone, name, membir, carno, bno, bname, bloc)
+			VALUES(
+				#{memno},#{memid},#{phone},#{name},#{membir},#{carno},#{bno},#{bname},#{bloc}
+			)
+		</insert>
+		
+		<select id="kakasid" resultType="string" parameterType="int">
+			SELECT
+				memid
+			FROM
+				member
+			WHERE
+				memno = #{memno}
+		</select>
+		
+		
+		<update id="editInfo" parameterType="lVO">
+			UPDATE
+				member
+			SET
+				memid = #{memid},
+				phone = #{phone},
+				name = #{name}
+			WHERE
+				memno = #{memno}
+		</update>
+		
+		<select id = "selInfo" resultType ="lVO" parameterType="int">
+			SELECT
+				memid, phone, name, bno, bname , bloc
+			FROM
+				member
+			WHERE
+				memno = #{memno}
+		</select>
+		
+		<update id="busiInfo" parameterType="lVO">
+			UPDATE
+				member
+			SET
+				bno = #{bno},
+				bname = #{bname},
+				bloc = #{bloc}
+			WHERE
+				memno = #{memno}
+		</update>
+		
+		<select id="salList" resultType="sVO">
+			SELECT
+				pno, ptt, m.name, m.memno, today, lcnt, p.isshow
+			FROM
+				promotion p, member m 
+			WHERE
+				m.memno = #{memno}
+				AND m.memno = p.memno
+		    	AND p.isshow = 'Y'
+		    ORDER BY
+		    	today desc
+		</select>
+		
+		<select id="menu" resultType="lVO">
+			SELECT
+			    mno, mname, mprice, m.pno, p.memno
+			FROM
+			    menu m, promotion p, member b
+			WHERE
+			    p.pno = m.pno
+			    AND p.memno = b.memno
+			    AND b.memno = #{memno}
+		
+		</select>
+		
+		<update id="editmenu" parameterType="hashmap">
+			UPDATE
+			    menu
+			SET
+			    mname = #{MENU},
+			    mprice = #{PRICE}
+			WHERE
+			    mno = #{MNO}
+		</update>
+		
+</mapper>
